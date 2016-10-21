@@ -10,6 +10,31 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <title>The Dict</title>
+    <style>
+        body {
+            background: #fafafa;
+        }
+        .page-content {
+            margin-top: 7%;
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+
+        .word-card {
+            height: 210px;
+        }
+
+        .result-card {
+            height: 210px;
+        }
+
+        .other-result-card {
+            height: 70px;
+            max-height: 70px;
+        }
+    </style>
+
+
 </head>
 <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
@@ -17,7 +42,9 @@
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
                 <!-- Title -->
-                <span class="mdl-layout-title"><b>The Dict</b></span>
+                <span class="mdl-layout-title" href="{{ url('/') }}">
+                    <b>The Dict</b>
+                </span>
             </div>
             <!-- Tabs -->
             <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
@@ -26,7 +53,7 @@
                     <i class="material-icons" style="font-size:14px">arrow_forward</i>
                     <b>Thai</b>
                 </a>
-                <a href="#fixed-tab-2" class="mdl-layout__tab">
+                <a href="#fixed-tab-2" class="mdl-layout__tab" style="font-size:16px">
                     <b>Thai</b>
                     <i class="material-icons" style="font-size:14px">arrow_forward</i>
                     <b>English</b>
@@ -39,22 +66,55 @@
         <main class="mdl-layout__content">
             <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
                 <div class="page-content">
-                    <h1>EN -> TH</h1>
                     {!! Form::open(['url' => '/api/translate/en-th']) !!}
-                        {!! Form::text('word') !!}
-                        {!! Form::submit('Search!') !!}
-                    {!! Form::close() !!}
+                    <div class="mdl-grid">
+                        <div class="mdl-card word-card mdl-shadow--2dp mdl-cell mdl-cell--5-col ">
+                            <div class="mdl-card__title">
+                                <b>English</b>
+                            </div>
 
-                    @if(isset($results))
-                        @if(sizeof($results) == 0)
-                            <p>Not Found</p>
-                        @endif
-                        @foreach($results as $result)
-                            Word : {{ $result -> sentry }}<br>
-                            Meaning : {{ $result -> tentry }}
-                            <hr>
-                        @endforeach
-                    @endif
+                            <div class="mdl-card__supporting-text">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    {!! Form::text('word', null, ['class' => 'mdl-textfield__input']) !!}
+                                    {!! Form::label('word', 'Word', ['class' => 'mdl-textfield__label']) !!}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--2-col">
+                            <div class="mdl-cell mdl-cell--12-col" style="text-align: center">
+                                {!! Form::submit('Search!', ['class' => 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent']) !!}
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--5-col ">
+                            <div class="mdl-card result-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+                                <div class="mdl-card__title">
+                                    <b>Thai</b>
+                                </div>
+                                <div class="mdl-card__supporting-text">
+                                    @if(isset($results))
+                                        @if(sizeof($results) == 0)
+                                            <p>Not Found</p>
+                                        @else
+                                            Word : {{ $results[0] -> sentry }}<br>
+                                            Meaning : {{ $results[0] -> tentry }}
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                            @if(isset($results))
+                                <ul class='mdl-list mdl-cell mdl-cell--12-col'>
+                                    @for($i = 1; $i < sizeof($results); $i++)
+                                        <li class="mdl-list__item">
+                                            <span class="mdl-list__item-primary-content">
+                                                {{ $results[$i] -> sentry }}:   {{ $results[$i] -> tentry }}
+                                            </span>
+                                        </li>
+                                    @endfor
+                                </ul>
+                            @endif
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
                 </div>
             </section>
             <section class="mdl-layout__tab-panel" id="fixed-tab-2">
