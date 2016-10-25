@@ -21,3 +21,12 @@ Route::get('/user', function (Request $request) {
 Route::post('/translate/en-th', 'TranslateController@translateENtoTH');
 
 Route::post('/translate/th-en', 'TranslateController@translateTHtoEN');
+
+Route::get('/quick_translate/en-th/{word}', 'TranslateController@quickTranslateENtoTH');
+
+Route::get('/quick_translate/th-en/{word}', 'TranslateController@quickTranslateTHtoEN');
+/*
+
+http://localhost/TheDict/public/api/quick_translate/en-th/cat
+
+*/

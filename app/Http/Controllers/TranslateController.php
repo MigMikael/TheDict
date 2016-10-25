@@ -39,4 +39,16 @@ class TranslateController extends Controller
 
         return view('index')->with('results', $results);
     }
+
+    public function quickTranslateENtoTH($word)
+    {
+        $result = EntoTh::where('sentry', '=', $word)->get();
+        return $result;
+    }
+
+    public function quickTranslateTHtoEN($word)
+    {
+        $result = ThtoEn::where('sentry', '=', $word)->get();
+        return $result;
+    }
 }
